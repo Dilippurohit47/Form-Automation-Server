@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "rootDir": "src",          // Explicitly define where your source code is located
+    "outDir": "dist",          // Directory for compiled output
+    "lib": ["es2020"],         // Specify ECMAScript version
+    "target": "es2020",        // Compile to ES2020
+    "module": "Node16",        // Node.js 16 module system
+    "moduleResolution": "Node16", // Node resolution for modules
+    "esModuleInterop": true,   // Enable interop between CommonJS and ESModules
+    "types": ["node"]          // Include Node.js types
+  },
+  "include": ["src"],          // Include all files inside the src directory
+  "exclude": ["node_modules"]  // Optionally, exclude node_modules if not already excluded
+}
