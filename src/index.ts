@@ -1,5 +1,5 @@
 import express, { Application, Request, Response } from "express";
-import { runPuppeteer } from "./puppeter/index.js"; // Import the function from puppeteer.ts
+import { playWright } from "./puppeter/index.js"; // Import the function from puppeteer.ts
 import "dotenv/config";
 import cors from "cors";
 
@@ -14,7 +14,7 @@ app.use(express.urlencoded({ extended: false }));
 const startPuppeteer = async () => {
   try {
     console.log("Starting Puppeteer...");
-    await runPuppeteer(); 
+    await playWright(); 
     console.log("Puppeteer completed!");
   } catch (error) {
     console.error("Error running Puppeteer:", error);
