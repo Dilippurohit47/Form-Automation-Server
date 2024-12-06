@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import jwt from "jsonwebtoken";
 import bycrypt from "bcrypt";
 import User from "../schema/userSchema.js";
 import { errorResponse } from "../utils/errorHelper.js";
@@ -15,9 +16,21 @@ export const signIn = async (req: Request, res: Response) => {
 
     const hashedPassword = await bycrypt.hash(password, 10);
 
-    await User.create({ name, email, password: hashedPassword });
+    const data = await User.create({ name, email, password: hashedPassword });
+
+    const token = jwt.sign({ id: data._id }, process.env.JWT_SECRET!, {
+      expiresIn: "30d",
+    });
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+    });
+
     return res.status(200).json({
-      message: "User logged in successfully",
+      message: "User sign-in  successfully",
+      data,
     });
   } catch (error) {
     console.log(error);
