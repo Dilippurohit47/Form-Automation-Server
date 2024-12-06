@@ -1,14 +1,9 @@
-import  { GoogleGenerativeAI } from '@google/generative-ai';  // Import the Gemini API
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
-// Input Data (Your user data)
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API); // Use your API key
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-
-// Initialize Gemini AI
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API);  // Use your API key
-const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
-
-// Function to generate a response to fill the form
-export const fillFormFields = async (fieldMapping,userData) => {
+export const fillFormFields = async (fieldMapping, userData) => {
   const prompt = `
     Given the following form fields: 
     ${JSON.stringify(fieldMapping)}, 
@@ -17,13 +12,10 @@ export const fillFormFields = async (fieldMapping,userData) => {
   `;
 
   try {
-    // Get response from Gemini AI
     const result = await model.generateContent(prompt);
-    const responseText = result.response.text();  // Get the text response
-return responseText
-    // Process the response if needed, e.g., parse and fill fields
+    const responseText = result.response.text();
+    return responseText;
   } catch (error) {
-    console.error('Error in generating content:', error);
+    console.error("Error in generating content:", error);
   }
 };
-

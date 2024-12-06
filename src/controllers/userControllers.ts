@@ -51,11 +51,9 @@ export const login = async (req: Request, res: Response) => {
     }
 
     const isPasswordCorrect = bycrypt.compare(password, user.password);
-
     if (!isPasswordCorrect) {
       return errorResponse(res, 404, "Invalid password");
     }
-
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "30d",
     });

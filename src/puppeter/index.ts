@@ -13,12 +13,13 @@ export const playWright = async (formUrl, name, surname, email) => {
       "GitHub profile URL": "https://github.com/dilippurohit",
       "city" :"mumbai",
       "Email address": "dilip@example.com",
-      LinkedInUrl: "fefe",
+      "LinkedInUrl": "linkdin/dilip.com",
+      "phone no" :"9328197347",
+      "portfolio" :"dilip.com"
     };
 
     let fieldMapping = {};
     const inputFields = page.locator("input");
-    console.log(inputFields);
     const count = await inputFields.count();
     for (let i = 0; i < count; i++) {
       const input = inputFields.nth(i);
@@ -38,8 +39,6 @@ export const playWright = async (formUrl, name, surname, email) => {
     }
     const parsedData = JSON.parse(newInput);
     for (const [input, value] of Object.entries(parsedData)) {
-      console.log(input, value);
-
       if (value) {
         // await page.fill('input[aria-label="Surname"]', "Purohit");
         await page.fill(`input[aria-label="${input}"]`, value);
@@ -48,10 +47,10 @@ export const playWright = async (formUrl, name, surname, email) => {
       }
     }
 
-    // console.log("Form filled successfully!");
-    // Optional: Submit the form if there's a submit button
-    // await page.click('button[type="submit"]');
-    // await browser.close();
+    
+    const submitButton = page.getByText('Submit');
+    await submitButton.click();
+    await browser.close();
   } catch (error) {
     console.error("Error filling the form:", error);
   }
