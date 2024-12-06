@@ -2,6 +2,7 @@ import express, { Application, Request, Response } from "express";
 import { playWright } from "./puppeter/index.js"; // Import the function from puppeteer.ts
 import "dotenv/config";
 import cors from "cors";
+import { connectDb } from "./db/mongoose.js";
 
 const app: Application = express();
 const PORT = process.env.PORT || 7000;
@@ -16,11 +17,12 @@ const startPuppeteer = async () => {
     console.log("Starting Puppeteer...");
     await playWright(); 
     console.log("Puppeteer completed!");
-  } catch (error) {
+  } catch (error) { 
     console.error("Error running Puppeteer:", error);
   }
 };
 
+connectDb()
 startPuppeteer();
 
 app.get("/", (req: Request, res: Response) => {

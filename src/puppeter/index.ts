@@ -9,12 +9,25 @@ export const playWright = async () => {
     });
     console.log("Page loaded successfully");
     await page.getByRole("button", { name: "Start" }).click();
-    await page.fill('input[aria-label="Name"]', "Dilip");
-    await page.fill('input[aria-label="Surname"]', "purohit");
-    await page.fill('input[aria-label="Email"]', "jhondoexample.com");
-    await page.getByRole("button", { name: "Submit" }).click();
 
-    await browser.close();
+    const firstNameInput = page.locator('input[aria-label="Name"]');
+    if (firstNameInput.isVisible()) {
+      await firstNameInput.fill("Dilip");
+    }
+    const githubInput = page.locator('input[aria-label="Git-hub"]');
+    if(githubInput.isVisible()){
+      console.log(true)
+    }
+    if (await githubInput.isVisible()) {
+      await githubInput.fill("Nice track");
+    } 
+   
+ 
+    await page.fill('input[aria-label="Surname"]', "Purohit");
+    await page.fill('input[aria-label="Email"]', "jhondoexample.com");
+    // await page.getByRole("button", { name: "Submit" }).click();
+
+    // await browser.close();
   } catch (error) {
     console.error("Error loading the page:", error);
   }
