@@ -4,15 +4,12 @@ const ProfileSchema = new mongoose.Schema(
     user_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true,
     },
     firstName: {
       type: String,
     },
     email: {
       type: String,
-      required: [true, "Email is required"],
-      unique: true,
     },
     fullName: {
       type: String,
@@ -32,9 +29,9 @@ const ProfileSchema = new mongoose.Schema(
     portfolioUrl: {
       type: String,
     },
-    experience:{
-        type:String
-    }
+    experience: {
+      type: String,
+    },
   },
   { timestamps: true }
 );
