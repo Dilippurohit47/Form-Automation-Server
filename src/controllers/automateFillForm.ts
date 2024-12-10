@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { errorResponse } from "../utils/errorHelper.js";
 import { playWright } from "../puppeter/index.js";
 import User from "../schema/userSchema.js";
+import Profile from "../schema/profileSchema.js";
 
 export const formFill = async (req: Request, res: Response) => {
   try {
@@ -16,7 +17,9 @@ export const formFill = async (req: Request, res: Response) => {
     if (!user) {
       return errorResponse(res, 404, "User not found");
     }
-    await playWright(url, user.name, "Purohit", user.email);
+
+    const profile  = await Profile.findOne({user_id:id})
+    await playWright(url,profile);
     return res.status(200).json({
       message: "Form filled successfully",
     });

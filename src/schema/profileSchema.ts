@@ -10,6 +10,7 @@ const ProfileSchema = new mongoose.Schema(
     },
     email: {
       type: String,
+      unique: false
     },
     fullName: {
       type: String,
@@ -30,6 +31,15 @@ const ProfileSchema = new mongoose.Schema(
       type: String,
     },
     experience: {
+      type: String,
+    },
+    city: {
+      type: String,
+    },
+    country: {
+      type: String,
+    },
+    state: {
       type: String,
     },
   },

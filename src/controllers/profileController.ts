@@ -8,7 +8,6 @@ export const createProfile = async (req: Request, res: Response) => {
     if (!data.userId) {
       return errorResponse(res, 404, "UserId is required");
     }
-
     const user = await User.findById(data.userId);
     if (!user) {
       return errorResponse(res, 404, "User doesn't exist ");
@@ -24,12 +23,15 @@ export const createProfile = async (req: Request, res: Response) => {
       phoneNumber: data.phoneNumber || null,
       portfolioUrl: data.portfolioUrl || null,
       experience: data.experience || null,
+      city: data.city || null,
+      country: data.country || null,
+      state: data.state || null,
     });
     return res.status(200).json({
       message: "Profile Updated",
     });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     errorResponse(res, 500, "Internal server error");
   }
 };
