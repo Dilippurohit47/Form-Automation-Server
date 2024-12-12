@@ -3,22 +3,29 @@ import jwt from "jsonwebtoken";
 import bycrypt from "bcrypt";
 import User from "../schema/userSchema.js";
 import { errorResponse } from "../utils/errorHelper.js";
+import { prisma } from "../db/prisma.js";
 export const signUp = async (req: Request, res: Response) => {
   try {
     const { name, email, password } = req.body;
     if (!name || !email || !password) {
       return errorResponse(res, 403, "Please enter all fields");
     }
-    const user = await User.findOne({ email });
+    const user = await prisma.user.findUnique({
+      where: {
+        email,
+      },
+    });
     if (user) {
       return errorResponse(res, 403, "Email already exist try diffrent email");
     }
 
     const hashedPassword = await bycrypt.hash(password, 10);
 
-    const data = await User.create({ name, email, password: hashedPassword });
+    const data = await prisma.user.create({
+      data: { name, email, password: hashedPassword },
+    });
 
-    const token = jwt.sign({ id: data._id }, process.env.JWT_SECRET!, {
+    const token = jwt.sign({ id: data.id }, process.env.JWT_SECRET!, {
       expiresIn: "30d",
     });
 
@@ -45,7 +52,11 @@ export const login = async (req: Request, res: Response) => {
       return errorResponse(res, 400, "Please enter all fields");
     }
 
-    const user = await User.findOne({ email });
+    const user = await prisma.user.findUnique({
+      where: {
+        email,
+      },
+    });
     if (!user) {
       return errorResponse(res, 404, "User not found");
     }

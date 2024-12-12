@@ -2,7 +2,6 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import "dotenv/config";
 import express, { Application, Request, Response } from "express";
-import { connectDb } from "./db/mongoose.js";
 import formRoutes from "./routes/formFillRoutes.js";
 import profileRoutes from "./routes/profileRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
@@ -15,7 +14,6 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-connectDb();
 app.get("/", (req: Request, res: Response) => {
   return res.send("Server is running🙌");
 });

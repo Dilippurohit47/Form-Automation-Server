@@ -3,6 +3,7 @@ import { errorResponse } from "../utils/errorHelper.js";
 import { playWright } from "../puppeter/index.js";
 import User from "../schema/userSchema.js";
 import Profile from "../schema/profileSchema.js";
+import { prisma } from "../db/prisma.js";
 
 export const formFill = async (req: Request, res: Response) => {
   try {
@@ -13,13 +14,17 @@ export const formFill = async (req: Request, res: Response) => {
       return errorResponse(res, 404, "Please enter url");
     }
 
-    const user = await User.findById(id);
+    const user = await prisma.user.findUnique({
+      where: {
+        id,
+      },
+    });
     if (!user) {
       return errorResponse(res, 404, "User not found");
     }
 
-    const profile  = await Profile.findOne({user_id:id})
-    await playWright(url,profile);
+    const profile = await prisma.profile.findFirst({ where: { userId: id } });
+    await playWright(url, profile);
     return res.status(200).json({
       message: "Form filled successfully",
     });
