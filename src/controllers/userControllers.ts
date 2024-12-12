@@ -25,6 +25,15 @@ export const signUp = async (req: Request, res: Response) => {
       data: { name, email, password: hashedPassword },
     });
 
+    if (data) {
+      await prisma.profile.create({
+        data: {
+          userId: data.id,
+          information: [{ name: name }, { email: email }],
+        },
+      });
+    }
+
     const token = jwt.sign({ id: data.id }, process.env.JWT_SECRET!, {
       expiresIn: "30d",
     });
@@ -36,7 +45,7 @@ export const signUp = async (req: Request, res: Response) => {
     });
 
     return res.status(200).json({
-      message: "User sign-in  successfully",
+      message: "User created  successfully",
       data,
     });
   } catch (error) {
