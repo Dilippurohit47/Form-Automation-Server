@@ -36,7 +36,8 @@ export const playWright = async (formUrl, user) => {
         if (await locator.isVisible()) {
           await page.fill(`input[aria-label="${input}"]`, value);
         }
-      } 
+      }
+    }
 
     const submitButton = page.getByText("Submit");
     // await submitButton.click();

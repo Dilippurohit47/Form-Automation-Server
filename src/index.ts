@@ -16,7 +16,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 connectDb();
-// startPuppeteer();
 app.get("/", (req: Request, res: Response) => {
   return res.send("Server is running🙌");
 });

@@ -4,7 +4,7 @@ const uri = process.env.MONGO_URI;
 let isConnected = false;
 
 // console.log(isConnected)
-export const connectDb = async () => {
+export const connectDb = async () => { 
   if (isConnected) {
     console.log("Already connected to the database");
     return;

@@ -42,7 +42,7 @@ export const login = async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      errorResponse(res, 404, "Please enter all fields");
+      return errorResponse(res, 400, "Please enter all fields");
     }
 
     const user = await User.findOne({ email });
@@ -50,10 +50,11 @@ export const login = async (req: Request, res: Response) => {
       return errorResponse(res, 404, "User not found");
     }
 
-    const isPasswordCorrect = bycrypt.compare(password, user.password);
+    const isPasswordCorrect = await bycrypt.compare(password, user.password);
     if (!isPasswordCorrect) {
-      return errorResponse(res, 404, "Invalid password");
+      return errorResponse(res, 401, "Invalid password");
     }
+
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "30d",
     });
