@@ -1,6 +1,7 @@
 import { Response, Request } from "express";
 import { errorResponse } from "../utils/errorHelper.js";
 import { prisma } from "../db/prisma.js";
+
 export const createProfile = async (req: Request, res: Response) => {
   try {
     const data = req.body;
@@ -8,21 +9,20 @@ export const createProfile = async (req: Request, res: Response) => {
     if (!userId) {
       return errorResponse(res, 404, "UserId is required");
     }
-    const user = await prisma.user.findUnique({
+    const profile = await prisma.profile.findUnique({
       where: {
-        id: userId,
+        userId,
       },
     });
 
-    if (!user) {
-      return errorResponse(res, 404, "User doesn't exist ");
-    }
+    const updatedInformation = [...profile?.information, data];
+    console.log(updatedInformation);
     await prisma.profile.update({
       where: {
         userId: userId,
       },
       data: {
-        information: [data],
+        information: updatedInformation,
       },
     });
     return res.status(200).json({
@@ -33,7 +33,6 @@ export const createProfile = async (req: Request, res: Response) => {
     errorResponse(res, 500, "Internal server error");
   }
 };
-
 export const getInformation = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;

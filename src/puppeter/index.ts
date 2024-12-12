@@ -38,8 +38,9 @@ export const playWright = async (formUrl, user) => {
         }
       }
     }
-
     const submitButton = page.getByText("Submit");
+    const pageContent = await page.content();
+    return pageContent;
     // await submitButton.click();
     // await browser.close();
   } catch (error) {
