@@ -29,7 +29,7 @@ export const signUp = async (req: Request, res: Response) => {
       await prisma.profile.create({
         data: {
           userId: data.id,
-          information: [{ name: name }, { email: email }],
+          information: [{ name: name, email: email }],
         },
       });
     }

@@ -14,15 +14,20 @@ export const createProfile = async (req: Request, res: Response) => {
         userId,
       },
     });
-
-    const updatedInformation = [...profile?.information, data];
-    console.log(updatedInformation);
+    const updatedData = data.inputs.reduce((acc, info) => {
+      acc[info.key] = info.value;
+      return acc;
+    }, {});
+    const updatedInformation = [...profile.information, updatedData];
+    const mergedObject = updatedInformation.reduce((acc, curr) => {
+      return { ...acc, ...curr };
+    }, {});
     await prisma.profile.update({
       where: {
         userId: userId,
       },
       data: {
-        information: updatedInformation,
+        information: [mergedObject],
       },
     });
     return res.status(200).json({
