@@ -11,7 +11,6 @@ export const formFill = async (req: Request, res: Response) => {
     if (!url) {
       return errorResponse(res, 404, "Please enter url");
     }
-
     const user = await prisma.user.findUnique({
       where: {
         id,
@@ -22,7 +21,7 @@ export const formFill = async (req: Request, res: Response) => {
     }
 
     const profile = await prisma.profile.findFirst({ where: { userId: id } });
-    const content = await playWright(url, profile);
+    const content = await playWright(url, profile.information);
     return res.status(200).json({
       message: "Form filled successfully",
       content,

@@ -1,7 +1,7 @@
 import { chromium } from "playwright";
 import { fillFormFields } from "../utils/lableCheckerAi.js";
 
-export const playWright = async (formUrl, user) => {
+export const playWright = async (formUrl, userInfo) => {
   try {
     const browser = await chromium.launch({ headless: false });
     const page = await browser.newPage();
@@ -16,11 +16,17 @@ export const playWright = async (formUrl, user) => {
     for (let i = 0; i < count; i++) {
       const input = inputFields.nth(i);
       const arialabel = await input.getAttribute("aria-label");
+      if (!arialabel) {
+        const name = await input.getAttribute("name");
+        fieldMapping[name] = name;
+      }
+
       if (arialabel) {
         fieldMapping[arialabel] = input;
       }
     }
-    const data = await fillFormFields(fieldMapping, user);
+
+    const data = await fillFormFields(fieldMapping, userInfo);
     const startIndex = data.indexOf("{");
     const endIndex = data.lastIndexOf("}");
     let newInput;
@@ -31,10 +37,13 @@ export const playWright = async (formUrl, user) => {
     for (const [input, value] of Object.entries(parsedData)) {
       if (value) {
         const locator = await page
-          .locator(`input[aria-label="${input}"]`)
+          .locator(`input[name="${input}"], input[aria-label="${input}"]`)
           .nth(0);
         if (await locator.isVisible()) {
-          await page.fill(`input[aria-label="${input}"]`, value);
+          await page.fill(
+            `input[name="${input}"] ,input[aria-label="${input}"] `,
+            value
+          );
         }
       }
     }
