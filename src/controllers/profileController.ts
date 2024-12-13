@@ -22,7 +22,8 @@ export const createProfile = async (req: Request, res: Response) => {
     const mergedObject = updatedInformation.reduce((acc, curr) => {
       return { ...acc, ...curr };
     }, {});
-    await prisma.profile.update({
+    console.log(mergedObject)
+    const confirm = await prisma.profile.update({
       where: {
         userId: userId,
       },
@@ -30,9 +31,13 @@ export const createProfile = async (req: Request, res: Response) => {
         information: [mergedObject],
       },
     });
-    return res.status(200).json({
-      message: "Profile Updated",
-    });
+    if (confirm) {
+      return res.status(200).json({
+        message: "Profile Updated",
+      });
+    } else {
+      errorResponse(res, 500, "Internal server error");
+    }
   } catch (error) {
     console.log(error);
     errorResponse(res, 500, "Internal server error");

@@ -3,5 +3,5 @@ import { createProfile, getInformation } from "../controllers/profileController.
 
 const app = express.Router()
 app.post("/save-information/:userId",createProfile)
-app.post("/get-information/:userId",getInformation)
+app.get("/get-information/:userId",getInformation)
 export default app
