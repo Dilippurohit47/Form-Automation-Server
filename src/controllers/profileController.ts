@@ -14,6 +14,10 @@ export const createProfile = async (req: Request, res: Response) => {
         userId,
       },
     });
+    if (!profile) {
+      return errorResponse(res, 404, "user doesn't exist");
+    }
+
     const updatedData = data.inputs.reduce((acc, info) => {
       acc[info.key] = info.value;
       return acc;
@@ -30,6 +34,7 @@ export const createProfile = async (req: Request, res: Response) => {
         information: [mergedObject],
       },
     });
+
     if (confirm) {
       return res.status(200).json({
         message: "Profile Updated",
@@ -66,7 +71,6 @@ export const deleteData = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
     const { keyToDelete, valueToDelete } = req.body;
-
     if (!keyToDelete || !valueToDelete) {
       return errorResponse(res, 400, "Data is already deleted or try again");
     }

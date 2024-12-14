@@ -4,5 +4,5 @@ import { createProfile, deleteData, getInformation } from "../controllers/profil
 const app = express.Router()
 app.post("/save-information/:userId",createProfile)
 app.get("/get-information/:userId",getInformation)
-app.post("/delete-information/:userId",deleteData)
+app.delete("/delete-information/:userId",deleteData)
 export default app
