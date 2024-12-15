@@ -1,7 +1,10 @@
 import { chromium } from "playwright";
 import { fillFormFields } from "../utils/lableCheckerAi.js";
+import { JsonArray } from "@prisma/client/runtime/library";
 
-export const playWright = async (formUrl, userInfo) => {
+export type UserInfoTypes = JsonArray;
+
+export const playWright = async (formUrl: string, userInfo: UserInfoTypes) => {
   try {
     const browser = await chromium.launch({ headless: false });
     const page = await browser.newPage();
@@ -9,19 +12,17 @@ export const playWright = async (formUrl, userInfo) => {
       waitUntil: "networkidle",
     });
 
-    let fieldMapping = {};
+    let fieldMapping: { [key: string]: any } = {};
     const inputFields = page.locator("input");
-    const count = await inputFields.count();
+    const count: number = await inputFields.count();
 
     for (let i = 0; i < count; i++) {
       const input = inputFields.nth(i);
       const arialabel = await input.getAttribute("aria-label");
       if (!arialabel) {
         const name = await input.getAttribute("name");
-        fieldMapping[name] = name;
-      }
-
-      if (arialabel) {
+        fieldMapping[name!] = name;
+      } else {
         fieldMapping[arialabel] = input;
       }
     }
@@ -35,13 +36,13 @@ export const playWright = async (formUrl, userInfo) => {
     }
     const parsedData = JSON.parse(newInput);
     for (const [input, value] of Object.entries(parsedData)) {
-      if (value) {
+      if (typeof value === "string") {
         const locator = await page
           .locator(`input[name="${input}"], input[aria-label="${input}"]`)
           .nth(0);
         if (await locator.isVisible()) {
           await page.fill(
-            `input[name="${input}"] ,input[aria-label="${input}"] `,
+            `input[name="${input}"], input[aria-label="${input}"]`,
             value
           );
         }

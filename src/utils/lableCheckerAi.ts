@@ -1,9 +1,17 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { UserInfoTypes } from "../puppeter/index.js";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API); // Use your API key
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-export const fillFormFields = async (fieldMapping, userData) => {
+type FieldMappingObject = {
+  [key: string]: string | null;
+};
+
+export const fillFormFields = async (
+  fieldMapping: FieldMappingObject,
+  userData: UserInfoTypes
+) => {
   const prompt = `
     Given the following form fields: 
     ${JSON.stringify(fieldMapping)}, 

@@ -1,7 +1,7 @@
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import "dotenv/config";
-import express, { Application, Request, Response } from "express";
+import express, { Application, Response } from "express";
 import formRoutes from "./routes/formFillRoutes.js";
 import profileRoutes from "./routes/profileRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
@@ -14,7 +14,7 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.get("/", (req: Request, res: Response) => {
+app.get("/", (_, res: Response) => {
   return res.send("Server is running🙌");
 });
 
